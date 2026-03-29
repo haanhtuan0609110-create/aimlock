@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Headlock OB51 - Menu</title>
+    <style>
+        :root {
+            --primary-blue: #3a86ff;
+            --bg-dark: #050608;
+            --card-bg: rgba(20, 20, 25, 0.95);
+        }
+
+        body {
+            margin: 0; background: var(--bg-dark); color: white;
+            font-family: 'Arial', sans-serif; overflow: hidden;
+            display: flex; justify-content: center; align-items: center; height: 100vh;
+        }
+
+        /* Hiệu ứng nền hạt bụi */
+        #particles-js {
+            position: absolute; width: 100%; height: 100%; z-index: 0;
+        }
+
+        .screen {
+            display: none; position: relative; z-index: 1;
+            width: 90%; max-width: 380px; text-align: center;
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .active { display: block; }
+
+   /* UI Components */
+        .logo-text { font-size: 2.2rem; letter-spacing: 6px; color: #bde0fe; text-shadow: 0 0 10px rgba(58, 134, 255, 0.6); }
+        .avatar { width: 80px; height: 80px; border-radius: 50%; border: 2px solid #333; margin: 15px 0; }
+        
+        .input-box {
+            width: 100%; padding: 15px; border-radius: 30px; border: 1px solid #444;
+            background: #151515; color: white; margin-bottom: 15px; outline: none;
+        }
+
+        .btn {
+            width: 100%; padding: 15px; border-radius: 30px; border: none;
+            font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px;
+        }
+        .btn-blue { background: var(--primary-blue); color: white; }
+        .btn-white { background: white; color: black; }
+
+        .menu-card {
+            background: var(--card-bg); border-radius: 15px; padding: 10px 20px;
+            border: 1px solid #333; text-align: left;
+        }
+
+        .item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 0; border-bottom: 1px solid #222;
+        }
+
+        /* Toast Popup */
+        .toast {
+            position: fixed; top: 40%; background: var(--primary-blue);
+            padding: 12px 25px; border-radius: 8px; display: none; z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+<div id="toast" class="toast">Đang xử lý...</div>
+
+<div id="login-screen" class="screen active">
+    <h1 class="logo-text">HEADLOCK</h1>
+    <img src="https://i.imgur.com/8K5M6Yv.png" class="avatar">
+    <p style="font-size: 0.8rem; color: #888; margin-bottom: 20px;">KEY LOGIN</p>
+    <input type="text" id="userKey" class="input-box" placeholder="Nhập Key của bạn...">
+    <button class="btn btn-blue" onclick="handleLogin()">LOGIN</button>
+</div>
+
+<div id="panel-screen" class="screen">
+    <h2 class="logo-text" style="font-size: 1.5rem;">HEADLOCK MENU</h2>
+    <div class="menu-card">
+        <div class="item">
+            <span>🎯 REG FILES</span>
+            <input type="checkbox" onchange="runFeature('Reg Files')">
+        </div>
+        <div class="item">
+            <span>🚀 BOOST RAM</span>
+            <input type="checkbox" onchange="runFeature('Optimize RAM')">
+        </div>
+        <div class="item">
+            <span>⚙️ FIX RUNG</span>
+            <input type="checkbox" onchange="runFeature('Fix Recoil')">
+        </div>
+    </div>
+    <div style="margin-top: 20px; display: flex; gap: 10px;">
+        <button class="btn btn-blue" style="flex: 2;" onclick="showGameSelect()">STARTING FILES (ON)</button>
+        <button class="btn btn-blue" style="flex: 1; background: #ff4d4d;" onclick="location.reload()">OFF</button>
+    </div>
+</div>
+
+<div id="game-screen" class="screen">
+    <div class="menu-card" style="text-align: center;">
+        <p>Chọn phiên bản Free Fire:</p>
+        <div style="display: flex; gap: 10px; margin: 15px 0;">
+            <button onclick="launchGame('FF Thường')" style="flex:1; padding: 20px; background: #333; border-radius: 10px; color: white; border: none;">FF Thường</button>
+            <button onclick="launchGame('FF Max')" style="flex:1; padding: 20px; background: #333; border-radius: 10px; color: white; border: none;">FF Max</button>
+        </div>
+        <button class="btn btn-white" onclick="alert('Thành công!')">✓ HeadLock Was Successful!</button>
+        <button onclick="showScreen('panel-screen')" style="background:none; border:none; color: red; margin-top: 15px; cursor: pointer;">× Quay lại</button>
+    </div>
+</div>
+
+<script>
+    // 1. Chuyển đổi màn hình
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+
+    // 2. Xử lý Đăng nhập
+    function handleLogin() {
+        const key = document.getElementById('userKey').value;
+        if(key.trim() !== "") {
+            showToast("Đăng nhập thành công!");
+            setTimeout(() => showScreen('panel-screen'), 1000);
+        } else {
+            alert("Vui lòng nhập Key!");
+        }
+    }
+
+    // 3. Thông báo Toast
+    function showToast(msg) {
+        const t = document.getElementById('toast');
+        t.innerText = msg;
+        t.style.display = 'block';
+        setTimeout(() => t.style.display = 'none', 2000);
+    }
+
+    // 4. CHỖ DÁN CODE CHỨC NĂNG CỦA BẠN
+    function runFeature(name) {
+        showToast("Đang kích hoạt: " + name);
+        // >>> DÁN CODE CAN THIỆP FILE CỦA BẠN TẠI ĐÂY <<<
+        console.log("Feature actived: " + name);
+    }
+
+    function showGameSelect() {
+        showScreen('game-screen');
+    }
+
+    function launchGame(version) {
+        showToast("Đang mở " + version + "...");
+        // >>> DÁN CODE MỞ GAME (Intent) TẠI ĐÂY <<<
+    }
+</script>
+
+<script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+<script>
+    particlesJS.load('particles-js', 'https://api.jsonserve.com/get/particles-config.json');
+</script>
+
+</body>
+</html>
