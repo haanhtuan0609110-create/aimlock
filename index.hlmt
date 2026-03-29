@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HeadLock Web App</title>
+    <style>
+        :root {
+            --bg-dark: #0a0c10;
+            --accent-blue: #3a86ff;
+            --accent-red: #ff4d4d;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%; width: 100%;
+            background-color: var(--bg-dark);
+            color: white; font-family: 'Segoe UI', sans-serif;
+            overflow: hidden;
+        }
+
+        .page {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+            padding: 20px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .active { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        /* UI Elements */
+        .header-title { font-size: 2rem; letter-spacing: 5px; color: #a0c4ff; margin-bottom: 5px; }
+        .sub-title { font-size: 0.7rem; color: #888; margin-bottom: 30px; }
+        
+        .avatar { width: 90px; height: 90px; border-radius: 50%; border: 1px solid #444; margin-bottom: 20px; }
+
+        .card {
+            background: rgba(30, 30, 35, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            width: 100%;
+            max-width: 350px;
+            border: 1px solid #333;
+        }
+
+        /* Controls */
+        .btn {
+            width: 100%; padding: 15px; border-radius: 25px;
+            border: none; cursor: pointer; font-weight: bold; margin-top: 10px;
+        }
+        .btn-blue { background: var(--accent-blue); color: white; }
+        .btn-red { background: var(--accent-red); color: white; }
+        .btn-white { background: white; color: black; }
+
+        .toggle-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 0; border-bottom: 1px solid #333;
+        }
+
+        /* Toast Message */
+        #toast {
+            position: fixed; top: 40%; left: 50%; transform: translateX(-50%);
+            background: var(--accent-blue); padding: 15px 30px; border-radius: 10px;
+            display: none; z-index: 100;
+        }
+    </style>
+</head>
+<body>
+
+<div id="page1" class="page active">
+    <div style="cursor: pointer; margin-bottom: 10px;">← Back</div>
+    <h1 class="header-title">HEADLOCK</h1>
+    <img src="https://i.imgur.com/8K5M6Yv.png" class="avatar">
+    <div style="margin-bottom: 30px; letter-spacing: 2px; font-size: 0.8rem;">KEY LOGIN</div>
+    <input type="text" placeholder="TienBoRai •" style="width: 100%; max-width: 350px; padding: 15px; border-radius: 25px; background: #222; border: 1px solid #444; color: white; margin-bottom: 15px;">
+    <button class="btn btn-blue" onclick="changePage(2)">LOGIN</button>
+</div>
+
+<div id="page2" class="page">
+    <div onclick="changePage(1)" style="cursor: pointer; align-self: flex-start;">← Back</div>
+    <h1 class="header-title">HEADLOCK</h1>
+    <div class="sub-title">BY TIENBORAI</div>
+    <img src="https://i.imgur.com/8K5M6Yv.png" class="avatar" style="width: 60px; height: 60px;">
+
+    <div class="card">
+        <div class="toggle-row">
+            <span>🎯 REG FILES</span>
+            <input type="checkbox" onchange="showToast('Đã bật REG FILES')">
+        </div>
+        <div class="toggle-row">
+            <span>🚀 BOOST RAM</span>
+            <input type="checkbox" onchange="runCustomCode('boostRam')">
+        </div>
+        <div class="toggle-row">
+            <span>💀 HEADLOCK</span>
+            <input type="checkbox">
+        </div>
+        <div class="toggle-row" style="border:none">
+            <span>⚙️ FIX RUNG</span>
+            <input type="checkbox">
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; font-size: 0.8rem; color: #888;">STARTING FILES</div>
+    <div style="display: flex; gap: 10px; width: 100%; max-width: 350px;">
+        <button class="btn btn-blue" onclick="changePage(3)">ON</button>
+        <button class="btn btn-red" onclick="showToast('Đã tắt toàn bộ')">OFF</button>
+    </div>
+</div>
+
+<div id="page3" class="page">
+    <div class="card" style="text-align: center;">
+        <p style="margin-bottom: 20px;">Chọn phiên bản Free Fire:</p>
+        <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+            <div onclick="runCustomCode('ff_normal')" style="flex:1; background: var(--accent-blue); padding: 20px; border-radius: 10px; cursor: pointer;">
+                🔥<br>Free Fire
+            </div>
+            <div onclick="runCustomCode('ff_max')" style="flex:1; background: #333; padding: 20px; border-radius: 10px; cursor: pointer;">
+                ⚡<br>Free Fire Max
+            </div>
+        </div>
+        <button class="btn btn-white" onclick="showToast('✓ HeadLock Was Successful!')">✓ HeadLock Was Successful!</button>
+        <button class="btn btn-white" style="color: red;" onclick="changePage(2)">× Turn off HeadLock</button>
+    </div>
+</div>
+
+<div id="toast">Thông báo</div>
+
+<script>
+    // Hàm chuyển trang
+    function changePage(pageNumber) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page' + pageNumber).classList.add('active');
+    }
+
+    // Hàm hiện thông báo
+    function showToast(text) {
+        const t = document.getElementById('toast');
+        t.innerText = text;
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2000);
+    }
+
+    // NƠI BẠN DÁN CODE CHỨC NĂNG
+    function runCustomCode(action) {
+        console.log("Đang chạy: " + action);
+        
+        if(action === 'boostRam') {
+            // Dán code Boost Ram của bạn vào đây
+            alert("Đang tối ưu RAM...");
+        }
+        
+        if(action === 'ff_normal') {
+            // Dán code mở game FF vào đây
+            alert("Đang khởi động Free Fire...");
+        }
+
+        if(action === 'ff_max') {
+            // Dán code mở game FF Max vào đây
+            alert("Đang khởi động FF Max...");
+        }
+    }
+</script>
+
+</body>
+</html>
